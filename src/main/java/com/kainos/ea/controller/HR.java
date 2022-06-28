@@ -2,9 +2,7 @@ package com.kainos.ea.controller;
 
 import com.kainos.ea.dao.EmployeeDao;
 import com.kainos.ea.dao.SalesEmployeeDao;
-import com.kainos.ea.exception.BankNumberLengthException;
-import com.kainos.ea.exception.DatabaseConnectionException;
-import com.kainos.ea.exception.SalaryTooLowException;
+import com.kainos.ea.exception.*;
 import com.kainos.ea.model.EmployeeRequest;
 import com.kainos.ea.model.SalesEmployee;
 import com.kainos.ea.service.EmployeeService;
@@ -79,7 +77,7 @@ public class HR {
     @Path("/employee")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createEmployee(EmployeeRequest employee) throws DatabaseConnectionException, SalaryTooLowException, BankNumberLengthException {
+    public Response createEmployee(EmployeeRequest employee) throws DatabaseConnectionException, SalaryTooLowException, BankNumberLengthException, NameTooLongException, NinLengthException {
         if (employeeValidator.isValidEmployee(employee)) {
             try {
                 int id = employeeService.insertEmployee(employee);

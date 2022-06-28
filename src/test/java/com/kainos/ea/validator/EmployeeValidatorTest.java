@@ -1,6 +1,8 @@
 package com.kainos.ea.validator;
 
 import com.kainos.ea.exception.BankNumberLengthException;
+import com.kainos.ea.exception.NameTooLongException;
+import com.kainos.ea.exception.NinLengthException;
 import com.kainos.ea.exception.SalaryTooLowException;
 import com.kainos.ea.model.EmployeeRequest;
 import org.junit.jupiter.api.Test;
@@ -12,7 +14,7 @@ class EmployeeValidatorTest {
     EmployeeValidator employeeValidator = new EmployeeValidator();
 
     @Test
-    public void isValidEmployee_shouldReturnTrue_whenValidEmployee() throws SalaryTooLowException, BankNumberLengthException {
+    public void isValidEmployee_shouldReturnTrue_whenValidEmployee() throws SalaryTooLowException, BankNumberLengthException, NameTooLongException, NinLengthException {
         EmployeeRequest employeeRequest = new EmployeeRequest(
                 30000,
                 "Tim",
@@ -66,6 +68,28 @@ class EmployeeValidatorTest {
     This should pass without code changes
      */
 
+    @Test
+    public void isValidEmployee_shouldThrowBankNumberLengthException_whenBankNumberTooShort() {
+        EmployeeRequest employeeRequest = new EmployeeRequest(
+                50000,
+                "Tim",
+                "Bloggs",
+                "tbloggs@email.com",
+                "1 Main Street",
+                "Main Road",
+                "Belfast",
+                "Antrim",
+                "BT99BT",
+                "Northern Ireland",
+                "12345678901",
+                "1234",
+                "AA1A11AA"
+        );
+
+        assertThrows(BankNumberLengthException.class,
+                () -> employeeValidator.isValidEmployee(employeeRequest));
+    }
+
     /*
     Unit Test Exercise 2
 
@@ -77,6 +101,28 @@ class EmployeeValidatorTest {
 
     This should pass without code changes
      */
+
+    @Test
+    public void isValidEmployee_shouldThrowBankNumberLengthException_whenBankNumberTooLong() {
+        EmployeeRequest employeeRequest = new EmployeeRequest(
+                50000,
+                "Tim",
+                "Bloggs",
+                "tbloggs@email.com",
+                "1 Main Street",
+                "Main Road",
+                "Belfast",
+                "Antrim",
+                "BT99BT",
+                "Northern Ireland",
+                "12345678901",
+                "1234567890",
+                "AA1A11AA"
+        );
+
+        assertThrows(BankNumberLengthException.class,
+                () -> employeeValidator.isValidEmployee(employeeRequest));
+    }
 
     /*
     Unit Test Exercise 3
@@ -90,6 +136,28 @@ class EmployeeValidatorTest {
     This should fail, make code changes to make this test pass
      */
 
+    @Test
+    public void isValidEmployee_shouldThrowNameTooLongException_whenFirstNameTooLong() {
+        EmployeeRequest employeeRequest = new EmployeeRequest(
+                50000,
+                "ABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEF",
+                "Bloggs",
+                "tbloggs@email.com",
+                "1 Main Street",
+                "Main Road",
+                "Belfast",
+                "Antrim",
+                "BT99BT",
+                "Northern Ireland",
+                "12345678901",
+                "12345678",
+                "AA1A11AA"
+        );
+
+        assertThrows(NameTooLongException.class,
+                () -> employeeValidator.isValidEmployee(employeeRequest));
+    }
+
     /*
     Unit Test Exercise 4
 
@@ -101,6 +169,28 @@ class EmployeeValidatorTest {
 
     This should fail, make code changes to make this test pass
      */
+
+    @Test
+    public void isValidEmployee_shouldThrowNameTooLongException_whenLastNameTooLong() {
+        EmployeeRequest employeeRequest = new EmployeeRequest(
+                50000,
+                "Joe",
+                "ABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEABCDEF",
+                "tbloggs@email.com",
+                "1 Main Street",
+                "Main Road",
+                "Belfast",
+                "Antrim",
+                "BT99BT",
+                "Northern Ireland",
+                "12345678901",
+                "12345678",
+                "AA1A11AA"
+        );
+
+        assertThrows(NameTooLongException.class,
+                () -> employeeValidator.isValidEmployee(employeeRequest));
+    }
 
     /*
     Unit Test Exercise 5
@@ -114,6 +204,28 @@ class EmployeeValidatorTest {
     This should fail, make code changes to make this test pass
      */
 
+    @Test
+    public void isValidEmployee_shouldThrowNinLegnthException_whenNinTooLong() {
+        EmployeeRequest employeeRequest = new EmployeeRequest(
+                50000,
+                "Joe",
+                "Bloggs",
+                "tbloggs@email.com",
+                "1 Main Street",
+                "Main Road",
+                "Belfast",
+                "Antrim",
+                "BT99BT",
+                "Northern Ireland",
+                "12345678901",
+                "12345678",
+                "AA1A11AA11"
+        );
+
+        assertThrows(NinLengthException.class,
+                () -> employeeValidator.isValidEmployee(employeeRequest));
+    }
+
     /*
     Unit Test Exercise 6
 
@@ -125,4 +237,26 @@ class EmployeeValidatorTest {
 
     This should fail, make code changes to make this test pass
      */
+
+    @Test
+    public void isValidEmployee_shouldThrowNinLegnthException_whenNinTooShort() {
+        EmployeeRequest employeeRequest = new EmployeeRequest(
+                50000,
+                "Joe",
+                "Bloggs",
+                "tbloggs@email.com",
+                "1 Main Street",
+                "Main Road",
+                "Belfast",
+                "Antrim",
+                "BT99BT",
+                "Northern Ireland",
+                "12345678901",
+                "12345678",
+                "AA1A11"
+        );
+
+        assertThrows(NinLengthException.class,
+                () -> employeeValidator.isValidEmployee(employeeRequest));
+    }
 }
