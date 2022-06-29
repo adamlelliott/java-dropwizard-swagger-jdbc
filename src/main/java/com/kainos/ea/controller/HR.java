@@ -55,7 +55,11 @@ public class HR {
     public Response getEmployeeById(@PathParam("employeeId") int employeeId) {
         try {
             return Response.status(HttpStatus.OK_200).entity(employeeService.getEmployee(employeeId)).build();
-        } catch (SQLException | DatabaseConnectionException | InvalidIdException | UserDoesNotExistException e) {
+        } catch(InvalidIdException | UserDoesNotExistException e) {
+            System.out.println(e);
+            return Response.status(HttpStatus.BAD_REQUEST_400).build();
+        }
+        catch (SQLException | DatabaseConnectionException e) {
             System.out.println(e);
             return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
@@ -78,16 +82,18 @@ public class HR {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response createEmployee(EmployeeRequest employee) throws DatabaseConnectionException, SalaryTooLowException, BankNumberLengthException, NameTooLongException, NinLengthException {
-        if (employeeValidator.isValidEmployee(employee)) {
-            try {
+        try {
+            if (employeeValidator.isValidEmployee(employee)) {
                 int id = employeeService.insertEmployee(employee);
                 return Response.status(HttpStatus.CREATED_201).entity(id).build();
-            } catch (Exception e) {
-                System.out.println(e);
-                return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
+            } else {
+                return Response.status(HttpStatus.BAD_REQUEST_400).build();
             }
-        } else {
+        } catch (SalaryTooLowException | BankNumberLengthException | NameTooLongException | NinLengthException e) {
             return Response.status(HttpStatus.BAD_REQUEST_400).build();
+        } catch (Exception e) {
+            System.out.println(e);
+            return Response.status(HttpStatus.INTERNAL_SERVER_ERROR_500).build();
         }
     }
 
